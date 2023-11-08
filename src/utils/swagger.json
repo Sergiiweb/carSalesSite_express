@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "SWAGGER FOR API MARCH-2023",
+    "description": "SWAGGER FOR API CarSalesSite",
     "version": "1.0.0",
-    "title": "MARCH-2023>",
+    "title": "CarSalesSite>",
     "contact": {
-      "email": "k0styalopuh3@gmail.com"
+      "email": "sergii@gmail.com"
     }
   },
   "paths": {

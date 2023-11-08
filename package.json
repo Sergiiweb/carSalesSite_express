@@ -1,5 +1,5 @@
 {
-  "name": "nodejs_hw",
+  "name": "carsalessite",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.ts",
@@ -42,7 +42,7 @@
     "hbs": "^4.2.0",
     "nodemailer-express-handlebars": "^6.1.0",
     "nodemon": "^3.0.1",
-    "rimraf": "^5.0.1",
+    "rimraf": "^5.0.5",
     "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.1",
     "tsc-watch": "^6.0.4",

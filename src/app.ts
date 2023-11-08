@@ -33,5 +33,3 @@ app.listen(configs.PORT, async () => {
   cronRunner();
   console.log(`Server has successfully started on PORT ${configs.PORT}`);
 });
-
-// CRUD c - create, r - read, u - update, d - delete
