@@ -62,7 +62,7 @@ router.post(
   "/administrator",
   commonMiddleware.isBodyValid(UserValidator.register),
   userMiddleware.isEmailUniq,
-  authController.register,
+  authController.administrator,
 );
 
 export const authRouter = router;
