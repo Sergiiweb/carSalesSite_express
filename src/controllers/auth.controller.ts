@@ -163,6 +163,20 @@ class AuthController {
       next(e);
     }
   }
+
+  public async administrator(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<void>> {
+    try {
+      await authService.administrator(req.body);
+
+      return res.sendStatus(201);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const authController = new AuthController();

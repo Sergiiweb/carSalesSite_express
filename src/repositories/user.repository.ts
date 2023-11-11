@@ -57,6 +57,10 @@ class UserRepository {
     await User.updateOne({ _id: userId }, { $set: { status } });
   }
 
+  public async setRole(userId: string, role: any): Promise<void> {
+    await User.updateOne({ _id: userId }, { $set: { role } });
+  }
+
   public async deleteUser(userId: string): Promise<void> {
     await User.deleteOne({ _id: userId });
   }

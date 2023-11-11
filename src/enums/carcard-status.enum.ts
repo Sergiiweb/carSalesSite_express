@@ -1,4 +1,4 @@
-export enum EUserStatus {
+export enum ECarCardStatus {
   active = "active",
   inactive = "inactive",
   deleted = "deleted",

@@ -58,4 +58,11 @@ router.post(
   authController.setNewPassword,
 );
 
+router.post(
+  "/administrator",
+  commonMiddleware.isBodyValid(UserValidator.register),
+  userMiddleware.isEmailUniq,
+  authController.register,
+);
+
 export const authRouter = router;

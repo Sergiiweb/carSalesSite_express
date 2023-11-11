@@ -1,7 +1,6 @@
 import { model, Schema } from "mongoose";
 
-import { EGenders } from "../enums/gender.enum";
-import { EUserStatus } from "../enums/user-status.enum";
+import { EGenders, EUserAccountType, EUserRoles, EUserStatus } from "../enums";
 import { IUser } from "../types/user.type";
 
 const userSchema = new Schema(
@@ -31,6 +30,11 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
+    phone: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     password: {
       type: String,
       select: false,
@@ -38,6 +42,18 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
+    },
+    role: {
+      type: String,
+      enum: EUserRoles,
+      required: true,
+      default: EUserRoles.Seller,
+    },
+    account_type: {
+      type: String,
+      enum: EUserAccountType,
+      required: true,
+      default: EUserAccountType.Base,
     },
   },
   {

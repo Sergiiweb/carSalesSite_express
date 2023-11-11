@@ -1,8 +1,11 @@
 import { ObjectId } from "mongodb";
 
-import { EActionTokenType } from "../enums/actionTokenType.enum";
-import { EEmailAction } from "../enums/email.action.enum";
-import { EUserStatus } from "../enums/user-status.enum";
+import {
+  EActionTokenType,
+  EEmailAction,
+  EUserRoles,
+  EUserStatus,
+} from "../enums";
 import { ApiError } from "../errors/api.error";
 import { actionTokenRepository } from "../repositories/action-token.repository";
 import { tokenRepository } from "../repositories/token.repository";
@@ -14,7 +17,7 @@ import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 
 class AuthService {
-  public async register(dto: IUser): Promise<void> {
+  public async register(dto: IUser): Promise<IUser> {
     try {
       const hashedPassword = await passwordService.hash(dto.password);
 
@@ -40,6 +43,8 @@ class AuthService {
         name: dto.name,
         actionToken,
       });
+
+      return user;
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
@@ -65,6 +70,7 @@ class AuthService {
       const tokensPair = tokenService.generateTokenPair({
         userId: user._id.toString(),
         name: user.name,
+        role: user.role,
       });
       await tokenRepository.create({ ...tokensPair, _userId: user._id });
 
@@ -245,6 +251,22 @@ class AuthService {
         userRepository.updateOneById(userId, { password }),
         this.logoutAll(userId),
       ]);
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async administrator(dto: IUser): Promise<void> {
+    try {
+      const user = await userRepository.getOneByParams({
+        role: EUserRoles.Administrator,
+      });
+      if (user) {
+        throw new ApiError("User already exist", 400);
+      }
+
+      const admin = await this.register(dto);
+      await userRepository.setRole(admin._id, EUserRoles.Administrator);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }

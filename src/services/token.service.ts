@@ -1,17 +1,17 @@
 import * as jwt from "jsonwebtoken";
 
 import { configs } from "../configs/config";
-import { EActionTokenType } from "../enums/actionTokenType.enum";
+import { EActionTokenType } from "../enums";
 import { ApiError } from "../errors/api.error";
 import { ITokenPayload, ITokensPair } from "../types/token.types";
 
 class TokenService {
   public generateTokenPair(payload: ITokenPayload): ITokensPair {
     const accessToken = jwt.sign(payload, configs.JWT_ACCESS_SECRET, {
-      expiresIn: "1m",
+      expiresIn: "1h",
     });
     const refreshToken = jwt.sign(payload, configs.JWT_REFRESH_SECRET, {
-      expiresIn: "2m",
+      expiresIn: "2h",
     });
 
     return {

@@ -58,6 +58,27 @@ class AuthMiddleware {
       next(e);
     }
   }
+
+  public checkRole(role: string) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const accessToken = req.get("Authorization");
+        if (!accessToken) {
+          throw new ApiError("No Token", 401);
+        }
+
+        const payload = tokenService.checkToken(accessToken, "access");
+
+        if (payload.role !== role) {
+          throw new ApiError("Access denied", 403);
+        }
+
+        next();
+      } catch (e) {
+        next(e);
+      }
+    };
+  }
 }
 
 export const authMiddleware = new AuthMiddleware();
