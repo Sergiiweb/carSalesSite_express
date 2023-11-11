@@ -262,7 +262,7 @@ class AuthService {
         role: EUserRoles.Administrator,
       });
       if (user) {
-        throw new ApiError("User already exist", 400);
+        throw new ApiError("You can`t be admin. Admin is already exist", 400);
       }
 
       const admin = await this.register(dto);
