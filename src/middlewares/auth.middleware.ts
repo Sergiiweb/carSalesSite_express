@@ -59,7 +59,7 @@ class AuthMiddleware {
     }
   }
 
-  public checkRole(role: string) {
+  public checkRole(roles: string[]) {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
         const accessToken = req.get("Authorization");
@@ -69,7 +69,7 @@ class AuthMiddleware {
 
         const payload = tokenService.checkToken(accessToken, "access");
 
-        if (payload.role !== role) {
+        if (!roles.includes(payload.role)) {
           throw new ApiError("Access denied", 403);
         }
 

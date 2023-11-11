@@ -1,6 +1,6 @@
 import { UploadedFile } from "express-fileupload";
 
-import { EFileTypes } from "../enums/fileType.enum";
+import { EFileTypes, EUserRoles } from "../enums";
 import { ApiError } from "../errors/api.error";
 import { userRepository } from "../repositories/user.repository";
 import { IPaginationResponse, IQuery } from "../types/pagination.type";
@@ -42,8 +42,9 @@ class UserService {
     manageUserId: string,
     dto: Partial<IUser>,
     userId: string,
+    role: string,
   ): Promise<IUser> {
-    this.checkAbilityToManage(userId, manageUserId);
+    this.checkAbilityToManage(userId, manageUserId, role);
 
     return await userRepository.updateOneById(manageUserId, dto);
   }
@@ -75,8 +76,12 @@ class UserService {
     return await userRepository.updateOneById(userId, { avatar: filePath });
   }
 
-  private checkAbilityToManage(userId: string, manageUserId: string): void {
-    if (userId !== manageUserId) {
+  private checkAbilityToManage(
+    userId: string,
+    manageUserId: string,
+    role: string,
+  ): void {
+    if (userId !== manageUserId && role !== EUserRoles.Administrator) {
       throw new ApiError("You can not manage this user", 403);
     }
   }

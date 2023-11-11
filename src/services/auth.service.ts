@@ -54,6 +54,8 @@ class AuthService {
     try {
       const user = await userRepository.getOneByParams({ email: dto.email }, [
         "password",
+        "name",
+        "role",
       ]);
       if (!user) {
         throw new ApiError("Invalid credentials provided", 401);

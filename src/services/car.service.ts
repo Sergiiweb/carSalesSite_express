@@ -1,3 +1,4 @@
+import { EUserRoles } from "../enums";
 import { ApiError } from "../errors/api.error";
 import { carRepository } from "../repositories/car.repository";
 import { ICar } from "../types/car.type";
@@ -15,26 +16,32 @@ class CarService {
     carId: string,
     dto: Partial<ICar>,
     userId: string,
+    role: string,
   ): Promise<ICar> {
-    await this.checkAbilityToManage(userId, carId);
+    await this.checkAbilityToManage(userId, carId, role);
     return await carRepository.updateCar(carId, dto);
   }
 
-  public async deleteCar(carId: string, userId: string): Promise<void> {
-    await this.checkAbilityToManage(userId, carId);
+  public async deleteCar(
+    carId: string,
+    userId: string,
+    role: string,
+  ): Promise<void> {
+    await this.checkAbilityToManage(userId, carId, role);
     await carRepository.deleteCar(carId);
   }
 
   private async checkAbilityToManage(
     userId: string,
     manageCarId: string,
+    role: string,
   ): Promise<ICar> {
     const car = await carRepository.getOneByParams({
       _userId: userId,
       _id: manageCarId,
     });
 
-    if (!car) {
+    if (!car && role !== EUserRoles.Administrator) {
       throw new ApiError("You can not manage this car", 403);
     }
 
