@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { carController } from "../controllers/car.controller";
-import {EUserAccountType, EUserRoles} from "../enums";
+import { EUserAccountType, EUserRoles } from "../enums";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { carMiddleware } from "../middlewares/car.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";

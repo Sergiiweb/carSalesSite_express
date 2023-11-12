@@ -3,8 +3,7 @@ import { FilterQuery } from "mongoose";
 import { ECarCardStatus } from "../enums";
 import { Car } from "../models/Car.model";
 import { Statistics } from "../models/Statistics.model";
-import { ICar, IQuery } from "../types";
-import { IStatistics } from "../types/statistics.type";
+import { ICar, IQuery, IStatistics } from "../types";
 
 class CarRepository {
   public async getAll(): Promise<ICar[]> {

@@ -8,10 +8,8 @@ import {
 import { ApiError } from "../errors/api.error";
 import { carRepository } from "../repositories/car.repository";
 import { userRepository } from "../repositories/user.repository";
-import { ICar, IPaginationResponse, IQuery } from "../types";
+import { ICar, IPaginationResponse, IQuery, IStatistics } from "../types";
 import { emailService } from "./email.service";
-import {Statistics} from "../models/Statistics.model";
-import {IStatistics} from "../types/statistics.type";
 
 class CarService {
   public async getAll(): Promise<ICar[]> {
@@ -40,31 +38,10 @@ class CarService {
     userId: string,
     accountType: string,
   ): Promise<ICar> {
-    const userCar = await carRepository.getOneByParams({ _userId: userId });
-    if (userCar && accountType === EUserAccountType.Base) {
-      throw new ApiError(
-        "You can not add any more cars. Buy premium account.",
-        403,
-      );
-    }
-
-    const checkForBadWords = dto.description.match(regexConstants.DESCRIPTION);
-    if (!checkForBadWords) {
-      dto.status = ECarCardStatus.active;
-    } else {
-      const moderator = await userRepository.getOneByParams({
-        role: EUserRoles.Manager,
-      });
-
-      await emailService.sendMail(
-        moderator.email,
-        EEmailAction.MODERATE_CAR_CARD,
-        {
-          name: moderator.name,
-          id: dto._id,
-        },
-      );
-    }
+    await Promise.all([
+      this.checkAbilityToCreate(userId, accountType),
+      this.checkForBadWords(dto),
+    ]);
 
     return await carRepository.createCar(dto, userId);
   }
@@ -141,6 +118,38 @@ class CarService {
     }
 
     return car;
+  }
+
+  private async checkAbilityToCreate(
+    userId: string,
+    accountType: string,
+  ): Promise<void> {
+    const userCar = await carRepository.getOneByParams({ _userId: userId });
+    if (userCar && accountType === EUserAccountType.Base) {
+      throw new ApiError(
+        "You can not add any more cars. Buy premium account.",
+        403,
+      );
+    }
+  }
+
+  private async checkForBadWords(dto: ICar): Promise<void> {
+    const checkForBadWords = dto.description.match(regexConstants.DESCRIPTION);
+    if (!checkForBadWords) {
+      dto.status = ECarCardStatus.active;
+    } else {
+      const moderator = await userRepository.getOneByParams({
+        role: EUserRoles.Manager,
+      });
+      await emailService.sendMail(
+        moderator.email,
+        EEmailAction.MODERATE_CAR_CARD,
+        {
+          name: moderator.name,
+          id: dto._id,
+        },
+      );
+    }
   }
 }
 
