@@ -2,7 +2,7 @@ import { CronJob } from "cron";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-import { EEmailAction } from "../enums/email.action.enum";
+import { EEmailAction } from "../enums";
 import { ApiError } from "../errors/api.error";
 import { userRepository } from "../repositories/user.repository";
 import { emailService } from "../services/email.service";
@@ -29,7 +29,4 @@ const handler = async function () {
   }
 };
 
-export const sendNotificationToOldVisitor = new CronJob(
-  "* */30 * * * *",
-  handler,
-);
+export const sendNotificationToOldVisitor = new CronJob("0 0 0 * * *", handler);

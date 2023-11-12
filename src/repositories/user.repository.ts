@@ -1,8 +1,7 @@
 import { FilterQuery } from "mongoose";
 
 import { User } from "../models/User.model";
-import { IQuery } from "../types/pagination.type";
-import { IUser, IUserCredentials } from "../types/user.type";
+import { IQuery, IUser, IUserCredentials } from "../types";
 
 class UserRepository {
   public async getAll(): Promise<IUser[]> {
@@ -53,12 +52,22 @@ class UserRepository {
     });
   }
 
-  public async setStatus(userId: string, status: any): Promise<void> {
+  public async setStatus(userId: string, status: string): Promise<void> {
     await User.updateOne({ _id: userId }, { $set: { status } });
   }
 
-  public async setRole(userId: string, role: any): Promise<void> {
+  public async setRole(userId: string, role: string): Promise<void> {
     await User.updateOne({ _id: userId }, { $set: { role } });
+  }
+
+  public async setAccountType(
+    userId: string,
+    accountType: string,
+  ): Promise<void> {
+    await User.updateOne(
+      { _id: userId },
+      { $set: { account_type: accountType } },
+    );
   }
 
   public async deleteUser(userId: string): Promise<void> {

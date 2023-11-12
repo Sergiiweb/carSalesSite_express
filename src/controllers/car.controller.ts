@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { carService } from "../services/car.service";
-import { ICar } from "../types/car.type";
-import { ITokenPayload } from "../types/token.types";
+import { ICar, IQuery, ITokenPayload } from "../types";
 
 class CarController {
   public async getAll(
@@ -11,7 +10,7 @@ class CarController {
     next: NextFunction,
   ): Promise<Response<ICar[]>> {
     try {
-      const cars = await carService.getAll();
+      const cars = await carService.getAllWithPagination(req.query as IQuery);
 
       return res.json(cars);
     } catch (e) {
@@ -39,9 +38,10 @@ class CarController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { userId } = req.res.locals.tokenPayload as ITokenPayload;
+      const { userId, accountType } = req.res.locals
+        .tokenPayload as ITokenPayload;
 
-      const car = await carService.createCar(req.body, userId);
+      const car = await carService.createCar(req.body, userId, accountType);
 
       res.status(201).json(car);
     } catch (e) {
@@ -76,6 +76,22 @@ class CarController {
       await carService.deleteCar(req.params.carId, userId, role);
 
       res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getAllInactiveCars(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<ICar[]>> {
+    try {
+      const cars = await carService.getAllInactiveCarsWithPagination(
+        req.query as IQuery,
+      );
+
+      return res.json(cars);
     } catch (e) {
       next(e);
     }

@@ -1,4 +1,4 @@
-import { EEmailAction } from "../enums/email.action.enum";
+import { EEmailAction } from "../enums";
 
 export const templates = {
   [EEmailAction.REGISTER]: {
@@ -12,5 +12,9 @@ export const templates = {
   [EEmailAction.OLD_VISIT]: {
     templateName: "old-visit",
     subject: "Hello!!!",
+  },
+  [EEmailAction.MODERATE_CAR_CARD]: {
+    templateName: "moderate-car-card",
+    subject: "You need to moderate this car card",
   },
 };

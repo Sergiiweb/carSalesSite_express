@@ -7,6 +7,7 @@ export interface ITokenPayload {
   userId: string;
   name?: string;
   role?: string;
+  accountType?: string;
 }
 
 export interface ITokensPair {

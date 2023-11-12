@@ -1,11 +1,15 @@
 import { model, Schema, Types } from "mongoose";
 
-import { ECarCardStatus, EProducers } from "../enums";
+import { ECarBrand, ECarCardRegion, ECarCardStatus, ECurrency } from "../enums";
 import { ICar } from "../types/car.type";
 import { User } from "./User.model";
 
 const carSchema = new Schema(
   {
+    brand: {
+      type: String,
+      enum: ECarBrand,
+    },
     model: {
       type: String,
     },
@@ -25,15 +29,24 @@ const carSchema = new Schema(
       min: [1, "Minimum price is 1"],
       max: [1000000000, `Maximum price is 1000000000}`],
     },
-    producer: {
+    currency: {
       type: String,
-      enum: EProducers,
+      enum: ECurrency,
+    },
+    region: {
+      type: String,
+      enum: ECarCardRegion,
     },
     status: {
       type: String,
       enum: ECarCardStatus,
       required: true,
       default: ECarCardStatus.inactive,
+    },
+    views: {
+      type: Number,
+      required: true,
+      default: 0,
     },
     _userId: {
       type: Types.ObjectId,

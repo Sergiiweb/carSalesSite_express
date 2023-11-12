@@ -1,8 +1,8 @@
 import { FilterQuery } from "mongoose";
 
-import { EActionTokenType } from "../enums/actionTokenType.enum";
+import { EActionTokenType } from "../enums";
 import { ActionToken } from "../models/ActionToken.model";
-import { IActionToken } from "../types/token.types";
+import { IActionToken } from "../types";
 
 export class ActionTokenRepository {
   public async create(dto: IActionToken): Promise<IActionToken> {

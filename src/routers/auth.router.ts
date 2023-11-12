@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { authController } from "../controllers/auth.controller";
+import { EUserRoles } from "../enums";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
 import { userMiddleware } from "../middlewares/user.middleware";
@@ -63,6 +64,18 @@ router.post(
   commonMiddleware.isBodyValid(UserValidator.register),
   userMiddleware.isEmailUniq,
   authController.administrator,
+);
+
+router.patch(
+  "/administrator/set-manager/:userId",
+  authMiddleware.checkRole([EUserRoles.Administrator]),
+  authController.setManager,
+);
+
+router.patch(
+  "/buy-premium-account/:userId",
+  authMiddleware.checkRole([EUserRoles.Administrator, EUserRoles.Manager]),
+  authController.buyPremiumAccount,
 );
 
 export const authRouter = router;

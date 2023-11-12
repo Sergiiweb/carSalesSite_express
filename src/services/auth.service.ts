@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import {
   EActionTokenType,
   EEmailAction,
+  EUserAccountType,
   EUserRoles,
   EUserStatus,
 } from "../enums";
@@ -10,8 +11,13 @@ import { ApiError } from "../errors/api.error";
 import { actionTokenRepository } from "../repositories/action-token.repository";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
-import { ITokenPayload, ITokensPair } from "../types/token.types";
-import { ISetNewPassword, IUser, IUserCredentials } from "../types/user.type";
+import {
+  ISetNewPassword,
+  ITokenPayload,
+  ITokensPair,
+  IUser,
+  IUserCredentials,
+} from "../types";
 import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
@@ -56,6 +62,7 @@ class AuthService {
         "password",
         "name",
         "role",
+        "account_type",
       ]);
       if (!user) {
         throw new ApiError("Invalid credentials provided", 401);
@@ -73,6 +80,7 @@ class AuthService {
         userId: user._id.toString(),
         name: user.name,
         role: user.role,
+        accountType: user.account_type,
       });
       await tokenRepository.create({ ...tokensPair, _userId: user._id });
 
@@ -264,11 +272,33 @@ class AuthService {
         role: EUserRoles.Administrator,
       });
       if (user) {
-        throw new ApiError("You can`t be admin. Admin is already exist", 400);
+        throw new ApiError("You can`t be admin. Only one Admin allowed", 400);
       }
 
       const admin = await this.register(dto);
-      await userRepository.setRole(admin._id, EUserRoles.Administrator);
+      await Promise.all([
+        userRepository.setRole(admin._id, EUserRoles.Administrator),
+        userRepository.setAccountType(admin._id, EUserAccountType.Premium),
+      ]);
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async setManager(userId: string): Promise<void> {
+    try {
+      await Promise.all([
+        userRepository.setRole(userId, EUserRoles.Manager),
+        userRepository.setAccountType(userId, EUserAccountType.Premium),
+      ]);
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async buyPremiumAccount(userId: string): Promise<void> {
+    try {
+      await userRepository.setAccountType(userId, EUserAccountType.Premium);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }

@@ -1,11 +1,36 @@
 import { FilterQuery } from "mongoose";
 
+import { ECarCardStatus } from "../enums";
 import { Car } from "../models/Car.model";
-import { ICar } from "../types/car.type";
+import { ICar, IQuery } from "../types";
 
 class CarRepository {
   public async getAll(): Promise<ICar[]> {
-    return await Car.find();
+    return await Car.find({ status: ECarCardStatus.active }).populate(
+      "_userId",
+      ["name", "phone"],
+    );
+  }
+
+  public async getMany(query: IQuery): Promise<[ICar[], number]> {
+    const queryStr = JSON.stringify(query);
+    const queryObj = JSON.parse(
+      queryStr.replace(/\b(gte|lte|gt|lt)\b/, (match) => `$${match}`),
+    );
+
+    const { page, limit, sortedBy, ...searchObject } = queryObj;
+    searchObject.status = ECarCardStatus.active;
+
+    const skip = +limit * (+page - 1);
+
+    return await Promise.all([
+      Car.find(searchObject)
+        .limit(+limit)
+        .skip(skip)
+        .sort(sortedBy)
+        .populate("_userId", ["name", "phone"]),
+      Car.count(searchObject),
+    ]);
   }
 
   public async getOneByParams(params: FilterQuery<ICar>): Promise<ICar> {
@@ -28,6 +53,27 @@ class CarRepository {
 
   public async deleteCar(carId: string): Promise<void> {
     await Car.deleteOne({ _id: carId });
+  }
+
+  public async getAllInactiveCars(query: IQuery): Promise<[ICar[], number]> {
+    const queryStr = JSON.stringify(query);
+    const queryObj = JSON.parse(
+      queryStr.replace(/\b(gte|lte|gt|lt)\b/, (match) => `$${match}`),
+    );
+
+    const { page, limit, sortedBy, ...searchObject } = queryObj;
+    searchObject.status = ECarCardStatus.inactive;
+
+    const skip = +limit * (+page - 1);
+
+    return await Promise.all([
+      Car.find(searchObject)
+        .limit(+limit)
+        .skip(skip)
+        .sort(sortedBy)
+        .populate("_userId", ["name", "phone"]),
+      Car.count(searchObject),
+    ]);
   }
 }
 

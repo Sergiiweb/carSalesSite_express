@@ -1,12 +1,15 @@
 import { Document } from "mongoose";
 
-import { ECarCardStatus, EProducers } from "../enums";
+import { ECarBrand, ECarCardRegion, ECarCardStatus, ECurrency } from "../enums";
 
 export interface ICar extends Document {
+  brand?: ECarBrand;
   model?: string;
-  year?: number;
-  producer?: EProducers;
-  price?: number;
   description?: string;
-  status: ECarCardStatus;
+  region?: ECarCardRegion;
+  year?: number;
+  price?: number;
+  currency?: ECurrency;
+  status?: ECarCardStatus;
+  views?: number;
 }

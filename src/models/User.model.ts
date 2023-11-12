@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 import { EGenders, EUserAccountType, EUserRoles, EUserStatus } from "../enums";
-import { IUser } from "../types/user.type";
+import { IUser } from "../types";
 
 const userSchema = new Schema(
   {

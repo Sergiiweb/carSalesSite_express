@@ -81,7 +81,10 @@ class UserService {
     manageUserId: string,
     role: string,
   ): void {
-    if (userId !== manageUserId && role !== EUserRoles.Administrator) {
+    if (
+      userId !== manageUserId &&
+      role !== (EUserRoles.Administrator || EUserRoles.Manager)
+    ) {
       throw new ApiError("You can not manage this user", 403);
     }
   }

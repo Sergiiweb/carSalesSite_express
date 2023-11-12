@@ -4,7 +4,7 @@ import * as path from "path";
 
 import { configs } from "../configs/config";
 import { templates } from "../constants/email.constant";
-import { EEmailAction } from "../enums/email.action.enum";
+import { EEmailAction } from "../enums";
 
 class EmailService {
   private transporter;
