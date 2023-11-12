@@ -10,6 +10,8 @@ import { carRepository } from "../repositories/car.repository";
 import { userRepository } from "../repositories/user.repository";
 import { ICar, IPaginationResponse, IQuery } from "../types";
 import { emailService } from "./email.service";
+import {Statistics} from "../models/Statistics.model";
+import {IStatistics} from "../types/statistics.type";
 
 class CarService {
   public async getAll(): Promise<ICar[]> {
@@ -98,6 +100,27 @@ class CarService {
         itemsFound,
         data: cars,
       };
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async getStatistics(carId: string): Promise<IStatistics> {
+    try {
+      return await carRepository.getStatistic(carId);
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async addViews(carId: string): Promise<any> {
+    try {
+      const stat = await carRepository.getStatistic(carId);
+      stat.views += 1;
+      stat.views_per_day += 1;
+      stat.views_per_week += 1;
+      stat.views_per_month += 1;
+      return await carRepository.addView(carId, stat);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }

@@ -7,32 +7,26 @@ const statisticsSchema = new Schema(
   {
     views: {
       type: Number,
-      required: true,
       default: 0,
     },
     views_per_day: {
       type: Number,
-      required: true,
       default: 0,
     },
     views_per_week: {
       type: Number,
-      required: true,
       default: 0,
     },
     views_per_month: {
       type: Number,
-      required: true,
       default: 0,
     },
     avg_region_price: {
       type: Number,
-      required: true,
       default: 0,
     },
     avg_price: {
       type: Number,
-      required: true,
       default: 0,
     },
     _carId: {

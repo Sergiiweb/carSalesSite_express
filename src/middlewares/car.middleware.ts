@@ -10,7 +10,7 @@ class CarMiddleware {
 
       const car = await carRepository.findById(carId);
       if (!car) {
-        throw new ApiError("User not found", 404);
+        throw new ApiError("Car not found", 404);
       }
 
       req.res.locals = car;

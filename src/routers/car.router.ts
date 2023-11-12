@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { carController } from "../controllers/car.controller";
-import { EUserRoles } from "../enums";
+import {EUserAccountType, EUserRoles} from "../enums";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { carMiddleware } from "../middlewares/car.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
@@ -25,8 +25,17 @@ router.post(
 router.get(
   "/car-cards-moderation",
   authMiddleware.checkRole([EUserRoles.Administrator, EUserRoles.Manager]),
+  authMiddleware.checkAccessToken,
   commonMiddleware.isQueryValid(5, "createdAt"),
   carController.getAllInactiveCars,
+);
+
+router.get(
+  "/statistics/:carId",
+  authMiddleware.checkAccountType(EUserAccountType.Premium),
+  commonMiddleware.isIdValid("carId"),
+  authMiddleware.checkAccessToken,
+  carController.getStatistics,
 );
 
 router.get(

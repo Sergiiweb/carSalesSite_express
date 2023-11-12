@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
+import { carRepository } from "../repositories/car.repository";
 import { carService } from "../services/car.service";
 import { ICar, IQuery, ITokenPayload } from "../types";
+import { IStatistics } from "../types/statistics.type";
 
 class CarController {
   public async getAll(
@@ -25,6 +27,8 @@ class CarController {
   ): Promise<void> {
     try {
       const car = req.res.locals;
+
+      await carService.addViews(car._id);
 
       res.json(car);
     } catch (e) {
@@ -92,6 +96,20 @@ class CarController {
       );
 
       return res.json(cars);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getStatistics(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<IStatistics>> {
+    try {
+      const statistics = await carService.getStatistics(req.params.carId);
+
+      return res.json(statistics);
     } catch (e) {
       next(e);
     }

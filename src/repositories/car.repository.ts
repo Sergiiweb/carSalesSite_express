@@ -2,7 +2,9 @@ import { FilterQuery } from "mongoose";
 
 import { ECarCardStatus } from "../enums";
 import { Car } from "../models/Car.model";
+import { Statistics } from "../models/Statistics.model";
 import { ICar, IQuery } from "../types";
+import { IStatistics } from "../types/statistics.type";
 
 class CarRepository {
   public async getAll(): Promise<ICar[]> {
@@ -42,7 +44,11 @@ class CarRepository {
   }
 
   public async createCar(dto: ICar, userId: string): Promise<ICar> {
-    return await Car.create({ ...dto, _userId: userId });
+    const car = await Car.create({ ...dto, _userId: userId });
+
+    await this.createStatistic(car._id);
+
+    return car;
   }
 
   public async updateCar(carId: string, dto: Partial<ICar>): Promise<ICar> {
@@ -74,6 +80,18 @@ class CarRepository {
         .populate("_userId", ["name", "phone"]),
       Car.count(searchObject),
     ]);
+  }
+
+  public async getStatistic(carId: string): Promise<IStatistics> {
+    return await Statistics.findOne({ _carId: carId });
+  }
+
+  public async createStatistic(carId: string): Promise<void> {
+    await Statistics.create({ _carId: carId });
+  }
+
+  public async addView(carId: string, dto: IStatistics): Promise<void> {
+    await Statistics.updateOne({ _carId: carId }, dto);
   }
 }
 

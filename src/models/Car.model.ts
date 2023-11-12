@@ -1,7 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 
 import { ECarBrand, ECarCardRegion, ECarCardStatus, ECurrency } from "../enums";
-import { ICar } from "../types/car.type";
+import { ICar } from "../types";
 import { User } from "./User.model";
 
 const carSchema = new Schema(

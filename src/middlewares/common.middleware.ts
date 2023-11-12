@@ -3,7 +3,7 @@ import { ObjectSchema } from "joi";
 import mongoose from "mongoose";
 
 import { ApiError } from "../errors/api.error";
-import { IQuery } from "../types/pagination.type";
+import { IQuery } from "../types";
 
 class CommonMiddleware {
   public isIdValid(param: string) {
