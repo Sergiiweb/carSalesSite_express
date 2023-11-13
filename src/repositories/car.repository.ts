@@ -6,12 +6,12 @@ import { Statistics } from "../models/Statistics.model";
 import { ICar, IQuery, IStatistics } from "../types";
 
 class CarRepository {
-  public async getAll(): Promise<ICar[]> {
-    return await Car.find({ status: ECarCardStatus.active }).populate(
-      "_userId",
-      ["name", "phone"],
-    );
-  }
+  // public async getAll(): Promise<ICar[]> {
+  //   return await Car.find({ status: ECarCardStatus.active }).populate(
+  //     "_userId",
+  //     ["name", "phone"],
+  //   );
+  // }
 
   public async getMany(query: IQuery): Promise<[ICar[], number]> {
     const queryStr = JSON.stringify(query);
@@ -95,8 +95,48 @@ class CarRepository {
     await Statistics.create({ _carId: carId });
   }
 
-  public async addView(carId: string, dto: IStatistics): Promise<void> {
+  public async updateStatistic(
+    carId: string,
+    dto: Partial<IStatistics>,
+  ): Promise<void> {
     await Statistics.updateOne({ _carId: carId }, dto);
+  }
+
+  // public async addView(carId: string, dto: IStatistics): Promise<void> {
+  //   await Statistics.updateOne({ _carId: carId }, dto);
+  // }
+
+  public async calculateAvgPrice(carId: string): Promise<Partial<IStatistics>> {
+    const car = await Car.findOne({ _id: carId });
+
+    const avgModelPriceByRegion = await Car.aggregate([
+      {
+        $match: { region: car.region, model: car.model, brand: car.brand },
+      },
+      {
+        $group: {
+          _id: null,
+          averagePrice: { $avg: "$price" },
+        },
+      },
+    ]);
+
+    const avgModelPrice = await Car.aggregate([
+      {
+        $match: { model: car.model, brand: car.brand },
+      },
+      {
+        $group: {
+          _id: null,
+          averagePrice: { $avg: "$price" },
+        },
+      },
+    ]);
+
+    return {
+      avg_region_price: avgModelPriceByRegion[0].averagePrice.toFixed(1),
+      avg_price: avgModelPrice[0].averagePrice.toFixed(1),
+    };
   }
 }
 

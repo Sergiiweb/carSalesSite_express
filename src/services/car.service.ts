@@ -16,10 +16,6 @@ import { emailService } from "./email.service";
 import { s3Service } from "./s3.service";
 
 class CarService {
-  // public async getAll(): Promise<ICar[]> {
-  //   return await carRepository.getAll();
-  // }
-
   public async getAllWithPagination(
     query: IQuery,
   ): Promise<IPaginationResponse<ICar>> {
@@ -100,6 +96,8 @@ class CarService {
 
   public async getStatistics(carId: string): Promise<IStatistics> {
     try {
+      const avgPrices = await carRepository.calculateAvgPrice(carId);
+      await carRepository.updateStatistic(carId, avgPrices);
       return await carRepository.getStatistic(carId);
     } catch (e) {
       throw new ApiError(e.message, e.status);
@@ -113,7 +111,7 @@ class CarService {
       stat.views_per_day += 1;
       stat.views_per_week += 1;
       stat.views_per_month += 1;
-      return await carRepository.addView(carId, stat);
+      return await carRepository.updateStatistic(carId, stat);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
