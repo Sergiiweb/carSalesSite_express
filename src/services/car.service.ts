@@ -16,9 +16,9 @@ import { emailService } from "./email.service";
 import { s3Service } from "./s3.service";
 
 class CarService {
-  public async getAll(): Promise<ICar[]> {
-    return await carRepository.getAll();
-  }
+  // public async getAll(): Promise<ICar[]> {
+  //   return await carRepository.getAll();
+  // }
 
   public async getAllWithPagination(
     query: IQuery,
@@ -76,7 +76,7 @@ class CarService {
       await s3Service.deleteFile(car.photo);
     }
 
-    const filePath = await s3Service.uploadFile(photo, EFileTypes.User, carId);
+    const filePath = await s3Service.uploadFile(photo, EFileTypes.Car, carId);
 
     return await carRepository.updateOneById(carId, { photo: filePath });
   }

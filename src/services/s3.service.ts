@@ -23,7 +23,7 @@ class S3Service {
 
   public async uploadFile(
     file: UploadedFile,
-    itemType: EFileTypes.User,
+    itemType: EFileTypes.User | EFileTypes.Car,
     itemId: string,
   ) {
     const filePath = this.buildPath(file.name, itemType, itemId);
