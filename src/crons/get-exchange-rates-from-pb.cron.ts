@@ -32,4 +32,4 @@ const handler = async function () {
   }
 };
 
-export const getExchangeRatesFromPB = new CronJob("*/10 * * * * *", handler);
+export const getExchangeRatesFromPB = new CronJob("0 0 0 * * *", handler);
