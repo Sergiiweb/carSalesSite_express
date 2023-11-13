@@ -28,15 +28,6 @@ class UserService {
     }
   }
 
-  // public async createUser(dto: IUser): Promise<IUser> {
-  //   const user = await userRepository.getOneByParams({ email: dto.email });
-  //   if (user) {
-  //     throw new ApiError("Email already exist", 409);
-  //   }
-  //
-  //   return await userRepository.createUser(dto);
-  // }
-
   public async updateUser(
     manageUserId: string,
     dto: Partial<IUser>,

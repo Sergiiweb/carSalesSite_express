@@ -10,6 +10,7 @@ class FilesMiddleware {
     next: NextFunction,
   ): Promise<void> {
     try {
+      console.log(req.files);
       if (Array.isArray(req.files.avatar)) {
         throw new ApiError("Avatar must be one single file, not array", 400);
       }
