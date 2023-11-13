@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { authService } from "../services/auth.service";
-import { ITokenPayload, ITokensPair } from "../types/token.types";
-import { ISetNewPassword, IUser } from "../types/user.type";
+import { ISetNewPassword, ITokenPayload, ITokensPair, IUser } from "../types";
 
 class AuthController {
   public async register(

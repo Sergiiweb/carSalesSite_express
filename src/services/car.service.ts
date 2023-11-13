@@ -1,7 +1,10 @@
+import { UploadedFile } from "express-fileupload";
+
 import { regexConstants } from "../constants/regex.constants";
 import {
   ECarCardStatus,
   EEmailAction,
+  EFileTypes,
   EUserAccountType,
   EUserRoles,
 } from "../enums";
@@ -10,6 +13,7 @@ import { carRepository } from "../repositories/car.repository";
 import { userRepository } from "../repositories/user.repository";
 import { ICar, IPaginationResponse, IQuery, IStatistics } from "../types";
 import { emailService } from "./email.service";
+import { s3Service } from "./s3.service";
 
 class CarService {
   public async getAll(): Promise<ICar[]> {
@@ -63,6 +67,18 @@ class CarService {
   ): Promise<void> {
     await this.checkAbilityToManage(userId, carId, role);
     await carRepository.deleteCar(carId);
+  }
+
+  public async uploadPhoto(photo: UploadedFile, carId: string): Promise<ICar> {
+    const car = await carRepository.findById(carId);
+
+    if (car.photo) {
+      await s3Service.deleteFile(car.photo);
+    }
+
+    const filePath = await s3Service.uploadFile(photo, EFileTypes.User, carId);
+
+    return await carRepository.updateOneById(carId, { photo: filePath });
   }
 
   public async getAllInactiveCarsWithPagination(

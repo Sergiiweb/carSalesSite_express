@@ -60,6 +60,12 @@ class CarRepository {
     await Car.deleteOne({ _id: carId });
   }
 
+  public async updateOneById(carId: string, dto: Partial<ICar>): Promise<ICar> {
+    return await Car.findByIdAndUpdate(carId, dto, {
+      returnDocument: "after",
+    });
+  }
+
   public async getAllInactiveCars(query: IQuery): Promise<[ICar[], number]> {
     const queryStr = JSON.stringify(query);
     const queryObj = JSON.parse(

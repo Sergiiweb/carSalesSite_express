@@ -5,7 +5,7 @@ import { EUserRoles } from "../enums";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
 import { userMiddleware } from "../middlewares/user.middleware";
-import { IUser } from "../types/user.type";
+import { IUser } from "../types";
 import { UserValidator } from "../validators/user.validator";
 
 const router = Router();

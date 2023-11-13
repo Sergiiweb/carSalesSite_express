@@ -43,10 +43,8 @@ const carSchema = new Schema(
       required: true,
       default: ECarCardStatus.inactive,
     },
-    views: {
-      type: Number,
-      required: true,
-      default: 0,
+    photo: {
+      type: String,
     },
     _userId: {
       type: Types.ObjectId,

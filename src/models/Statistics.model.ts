@@ -1,6 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 
-import { IStatistics } from "../types/statistics.type";
+import { IStatistics } from "../types";
 import { Car } from "./Car.model";
 
 const statisticsSchema = new Schema(

@@ -35,9 +35,9 @@ class UserRepository {
     return await User.findById(id);
   }
 
-  public async createUser(dto: IUser): Promise<IUser> {
-    return await User.create(dto);
-  }
+  // public async createUser(dto: IUser): Promise<IUser> {
+  //   return await User.create(dto);
+  // }
 
   public async register(dto: IUserCredentials): Promise<IUser> {
     return await User.create(dto);

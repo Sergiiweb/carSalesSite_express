@@ -90,7 +90,7 @@ class AuthMiddleware {
 
         const { accountType } = tokenService.checkToken(accessToken, "access");
 
-        if ( accountType !== type ) {
+        if (accountType !== type) {
           throw new ApiError("Access denied", 403);
         }
 

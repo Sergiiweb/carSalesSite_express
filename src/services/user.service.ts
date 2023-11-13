@@ -3,8 +3,7 @@ import { UploadedFile } from "express-fileupload";
 import { EFileTypes, EUserRoles } from "../enums";
 import { ApiError } from "../errors/api.error";
 import { userRepository } from "../repositories/user.repository";
-import { IPaginationResponse, IQuery } from "../types/pagination.type";
-import { IUser } from "../types/user.type";
+import { IPaginationResponse, IQuery, IUser } from "../types";
 import { s3Service } from "./s3.service";
 
 class UserService {

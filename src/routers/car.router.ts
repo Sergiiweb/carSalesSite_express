@@ -5,6 +5,7 @@ import { EUserAccountType, EUserRoles } from "../enums";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { carMiddleware } from "../middlewares/car.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
+import { fileMiddleware } from "../middlewares/files.middleware";
 import { CarValidator } from "../validators/car.validator";
 
 const router = Router();
@@ -31,14 +32,6 @@ router.get(
 );
 
 router.get(
-  "/statistics/:carId",
-  authMiddleware.checkAccountType(EUserAccountType.Premium),
-  commonMiddleware.isIdValid("carId"),
-  authMiddleware.checkAccessToken,
-  carController.getStatistics,
-);
-
-router.get(
   "/:carId",
   commonMiddleware.isIdValid("carId"),
   carMiddleware.getByIdOrThrow,
@@ -58,6 +51,21 @@ router.delete(
   authMiddleware.checkAccessToken,
   commonMiddleware.isIdValid("carId"),
   carController.deleteCar,
+);
+
+router.post(
+  "/:carId/photo",
+  authMiddleware.checkAccessToken,
+  fileMiddleware.isPhotoValid,
+  carController.uploadPhoto,
+);
+
+router.get(
+  "/:carId/statistics",
+  authMiddleware.checkAccountType(EUserAccountType.Premium),
+  commonMiddleware.isIdValid("carId"),
+  authMiddleware.checkAccessToken,
+  carController.getStatistics,
 );
 
 export const carRouter = router;

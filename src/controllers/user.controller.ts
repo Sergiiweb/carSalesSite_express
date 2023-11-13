@@ -3,9 +3,7 @@ import { UploadedFile } from "express-fileupload";
 
 import { userPresenter } from "../presenters/user.presenter";
 import { userService } from "../services/user.service";
-import { IQuery } from "../types/pagination.type";
-import { ITokenPayload } from "../types/token.types";
-import { IUser } from "../types/user.type";
+import { IQuery, ITokenPayload, IUser } from "../types";
 
 class UserController {
   public async getAll(

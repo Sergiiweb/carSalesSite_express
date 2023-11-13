@@ -1,7 +1,7 @@
 import { FilterQuery } from "mongoose";
 
 import { Token } from "../models/Token.model";
-import { IToken } from "../types/token.types";
+import { IToken } from "../types";
 
 export class TokenRepository {
   public async create(dto: Partial<IToken>): Promise<IToken> {

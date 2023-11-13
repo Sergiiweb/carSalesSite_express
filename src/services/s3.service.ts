@@ -8,7 +8,7 @@ import { UploadedFile } from "express-fileupload";
 import * as path from "path";
 
 import { configs } from "../configs/config";
-import { EFileTypes } from "../enums/fileType.enum";
+import { EFileTypes } from "../enums";
 
 class S3Service {
   constructor(

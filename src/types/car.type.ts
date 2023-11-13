@@ -11,5 +11,5 @@ export interface ICar extends Document {
   price?: number;
   currency?: ECurrency;
   status?: ECarCardStatus;
-  views?: number;
+  photo?: string;
 }

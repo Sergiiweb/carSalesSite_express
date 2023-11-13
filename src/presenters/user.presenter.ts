@@ -1,5 +1,5 @@
 import { configs } from "../configs/config";
-import { IUser } from "../types/user.type";
+import { IUser } from "../types";
 
 interface IPresenter<I, O> {
   present(payload: I): O;

@@ -1,7 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 
-import { EActionTokenType } from "../enums/actionTokenType.enum";
-import { IActionToken } from "../types/token.types";
+import { EActionTokenType } from "../enums";
+import { IActionToken } from "../types";
 import { User } from "./User.model";
 
 const tokensSchema = new Schema(
