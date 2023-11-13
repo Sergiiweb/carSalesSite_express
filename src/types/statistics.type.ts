@@ -8,3 +8,10 @@ export interface IStatistics extends Document {
   avg_region_price?: number;
   avg_price?: number;
 }
+
+export interface View {
+  timestamp: number;
+}
+export interface IViews extends Document {
+  views: View[];
+}

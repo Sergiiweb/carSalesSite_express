@@ -46,7 +46,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"model\": \"Corolla\",\r\n    \"year\": 2015,\r\n    \"brand\": \"Toyota\",\r\n    \"region\": \"kyiv\",\r\n    \"price\": 20000,\r\n    \"currency\": \"UAH\",\r\n    \"description\": \"Super puper Car Super puper Car Super puper Car\"\r\n}",
+					"raw": "{\r\n    \"model\": \"Corolla\",\r\n    \"year\": 2015,\r\n    \"brand\": \"Toyota\",\r\n    \"region\": \"kyiv\",\r\n    \"price\": 15000,\r\n    \"currency\": \"UAH\",\r\n    \"description\": \"Super puper Car Super puper Car Super puper Car\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -95,13 +95,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{API_HOST}}/cars/65515e003ef0f405815288d7/statistics",
+					"raw": "{{API_HOST}}/cars/65528daffc3a4472c4d10e1a/statistics",
 					"host": [
 						"{{API_HOST}}"
 					],
 					"path": [
 						"cars",
-						"65515e003ef0f405815288d7",
+						"65528daffc3a4472c4d10e1a",
 						"statistics"
 					]
 				}
@@ -180,20 +180,20 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "avatar",
+							"key": "photo",
 							"type": "file",
 							"src": "/C:/Users/User/Desktop/jada 253203017.jpg"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{API_HOST}}/cars/6551c94236802e0c3291c90d/photo",
+					"raw": "{{API_HOST}}/cars/65528daffc3a4472c4d10e1a/photo",
 					"host": [
 						"{{API_HOST}}"
 					],
 					"path": [
 						"cars",
-						"6551c94236802e0c3291c90d",
+						"65528daffc3a4472c4d10e1a",
 						"photo"
 					]
 				}

@@ -5,13 +5,14 @@ import {
   ECarCardStatus,
   EEmailAction,
   EFileTypes,
+  ETimeInterval,
   EUserAccountType,
   EUserRoles,
 } from "../enums";
 import { ApiError } from "../errors/api.error";
 import { carRepository } from "../repositories/car.repository";
 import { userRepository } from "../repositories/user.repository";
-import { ICar, IPaginationResponse, IQuery, IStatistics } from "../types";
+import { ICar, IPaginationResponse, IQuery, IStatistics, View } from "../types";
 import { emailService } from "./email.service";
 import { s3Service } from "./s3.service";
 
@@ -104,17 +105,46 @@ class CarService {
     }
   }
 
-  public async addViews(carId: string): Promise<any> {
+  public async addView(carId: string): Promise<void> {
     try {
+      const views = await carRepository.getViews(carId);
+      if (!views) {
+        await carRepository.createViews(carId);
+      }
+
+      const newView: View = {
+        timestamp: Date.now(),
+      };
+      views.views.push(newView);
+
+      await carRepository.updateViews(carId, views);
+      await this.updateStatisticViews(carId);
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  private async updateStatisticViews(carId: string): Promise<any> {
+    try {
+      const { views } = await carRepository.getViews(carId);
+
       const stat = await carRepository.getStatistic(carId);
-      stat.views += 1;
-      stat.views_per_day += 1;
-      stat.views_per_week += 1;
-      stat.views_per_month += 1;
+      stat.views = this.countViews(views, Number.MAX_SAFE_INTEGER);
+      stat.views_per_day = this.countViews(views, ETimeInterval.Day);
+      stat.views_per_week = this.countViews(views, ETimeInterval.Week);
+      stat.views_per_month = this.countViews(views, ETimeInterval.Month);
       return await carRepository.updateStatistic(carId, stat);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
+  }
+
+  private countViews(views: View[], interval: ETimeInterval): number {
+    const now = new Date().getTime();
+    const viewsWithinInterval = views.filter(
+      (view) => now - view.timestamp <= interval,
+    );
+    return viewsWithinInterval.length;
   }
 
   private async checkAbilityToManage(

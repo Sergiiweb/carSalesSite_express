@@ -9,3 +9,4 @@ export * from "./userAccountType.enum";
 export * from "./carcard-status.enum";
 export * from "./carCardRegion.enum";
 export * from "./currency.enum";
+export * from "./timeInterval.enum";

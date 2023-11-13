@@ -28,7 +28,7 @@ class CarController {
     try {
       const car = req.res.locals;
 
-      await carService.addViews(car._id);
+      await carService.addView(car._id);
 
       res.json(car);
     } catch (e) {

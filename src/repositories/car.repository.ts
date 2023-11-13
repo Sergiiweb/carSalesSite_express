@@ -3,7 +3,8 @@ import { FilterQuery } from "mongoose";
 import { ECarCardStatus } from "../enums";
 import { Car } from "../models/Car.model";
 import { Statistics } from "../models/Statistics.model";
-import { ICar, IQuery, IStatistics } from "../types";
+import { Views } from "../models/Views.model";
+import { ICar, IQuery, IStatistics, IViews } from "../types";
 
 class CarRepository {
   // public async getAll(): Promise<ICar[]> {
@@ -46,6 +47,7 @@ class CarRepository {
     const car = await Car.create({ ...dto, _userId: userId });
 
     await this.createStatistic(car._id);
+    await this.createViews(car._id);
 
     return car;
   }
@@ -137,6 +139,37 @@ class CarRepository {
       avg_region_price: avgModelPriceByRegion[0].averagePrice.toFixed(1),
       avg_price: avgModelPrice[0].averagePrice.toFixed(1),
     };
+  }
+
+  public async getViews(carId: string): Promise<IViews> {
+    return await Views.findOne({ _carId: carId });
+  }
+
+  public async createViews(carId: string): Promise<void> {
+    await Views.create({ _carId: carId });
+  }
+
+  public async updateViews(carId: string, dto: IViews): Promise<void> {
+    await Views.updateOne({ _carId: carId }, dto);
+  }
+
+  public async countViewsByCarId(carId: string): Promise<number> {
+    const result = await Views.aggregate([
+      {
+        $match: { _carId: carId },
+      },
+      {
+        $project: {
+          viewsCount: { $size: "$views" },
+        },
+      },
+    ]);
+
+    if (result.length > 0) {
+      return result[0].viewsCount;
+    }
+
+    return 0;
   }
 }
 
